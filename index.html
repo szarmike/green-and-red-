@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Toggle &amp; Camera</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f0f0;
+      font-family: sans-serif;
+    }
+    #actionBtn {
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: red;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- The single button -->
+  <button id="actionBtn">Red</button>
+
+  <!-- Hidden file input to invoke camera -->
+  <input
+    type="file"
+    id="cameraInput"
+    accept="image/*"
+    capture="environment"
+    style="display: none;"
+  />
+
+  <script>
+    const btn = document.getElementById('actionBtn');
+    const camInput = document.getElementById('cameraInput');
+    let isRed = true;
+
+    btn.addEventListener('click', () => {
+      // 1) Toggle color + text
+      if (isRed) {
+        btn.style.backgroundColor = 'green';
+        btn.textContent = 'Green';
+      } else {
+        btn.style.backgroundColor = 'red';
+        btn.textContent = 'Red';
+      }
+      isRed = !isRed;
+
+      // 2) Open camera UI
+      camInput.click();
+    });
+
+    // Optional: handle the photo once taken
+    camInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Display the captured image
+      const imgURL = URL.createObjectURL(file);
+      const img = document.createElement('img');
+      img.src = imgURL;
+      img.style.maxWidth = '90vw';
+      img.style.maxHeight = '90vh';
+
+      document.body.innerHTML = '';    // clear everything
+      document.body.appendChild(img);  // show the photo
+    });
+  </script>
+
+</body>
+</html>
